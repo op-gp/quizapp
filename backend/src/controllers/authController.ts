@@ -1,27 +1,28 @@
 import type { Request, Response} from 'express';
+import bcrypt from 'bcrypt';
 import User from '../models/User.ts';
-
-// Route logic for api/auth/users
-export const fetchUsers = async (req: Request, res: Response) => {
-    try {
-        const users = await User.find();
-
-        res.status(200).json(users);
-    }
-    catch (error) {
-        console.error("Error fetching all users");
-        res.status(500).json({message: "Error retrieving users", error})
-    }
-}
 
 // Route logic for api/auth/register
 export const register = async (req : Request, res: Response) => {
     try {
         const { username, password, role} = req.body;
 
+        if (!username || !password || !role){
+            console.error("authController: All fields are required.")
+            return res.status(404).json({message: "All fields are required"});
+        }
+
+        const existingUser = await User.findOne({username});
+
+        if (existingUser){
+            return res.status(400).json({message: "Username has already been taken."})
+        }
+
+        const hashedPassword = await bcrypt.hash(password, 8);
+
         const user = new User({
             username,
-            password,
+            hashedPassword,
             role
         });
 
@@ -40,25 +41,4 @@ export const register = async (req : Request, res: Response) => {
 
 export const login = async () => {
 
-}
-
-// Route logic for api/auth/user/<id>
-export const deleteUser = async (req: Request, res: Response) => {
-    try {
-        const userToDelete = await User.findByIdAndDelete(
-            req.params.id
-        )
-
-        if (!userToDelete){
-            console.error("User could not be found.");
-            return res.status(404).json({message: "User does not exist."})
-        }
-
-        console.log("User (", userToDelete.username, ") has been successfully deleted.")
-        res.status(200).json({username: userToDelete.username, message: "User of above mentioned username has been deleted"})
-    }
-    catch (error){
-        console.error("Error in deleteUser controller", error);
-        res.status(500).json({message: "Error in deleting user."})
-    }
 }

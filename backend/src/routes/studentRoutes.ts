@@ -11,4 +11,4 @@ router.get("/quizzes/:id/play")
 // Student submits the quiz.
 router.post("quizzes/:id/submit")
 
-router.get("/attempts/history")
+// router.get("/attempts/history")

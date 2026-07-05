@@ -4,7 +4,8 @@ import dotenv from 'dotenv';
 import { connectDB } from './configs/db.ts';
 
 // Import routes
-import authRoutes from './routes/authRoutes.ts'
+import authRoutes from './routes/authRoutes.ts';
+import adminRoutes from './routes/adminRoutes.ts';
 
 // Loads environment variables into the process.
 dotenv.config();
@@ -18,6 +19,7 @@ const app = express();
 // Able to parse JSON that comes from the request.
 app.use(express.json());
 app.use("/api/auth", authRoutes)
+app.use("/api/admin", adminRoutes)
 
 // First connect to the database and only after a successfull connection will the application start.
 // REASON: No reason for the application to start if it can't access the database to perform HTTP requests.
