@@ -1,6 +1,7 @@
 import type { Request, Response} from 'express';
 import User from '../models/User.ts';
 
+// Route logic for api/auth/users
 export const fetchUsers = async (req: Request, res: Response) => {
     try {
         const users = await User.find();
@@ -13,6 +14,7 @@ export const fetchUsers = async (req: Request, res: Response) => {
     }
 }
 
+// Route logic for api/auth/register
 export const register = async (req : Request, res: Response) => {
     try {
         const { username, password, role} = req.body;
@@ -23,13 +25,15 @@ export const register = async (req : Request, res: Response) => {
             role
         });
 
+        // Save the new user into the mongoDB database.
         const newUser = await user.save();
 
+        // Return a 201 HTTP Response (201:  Created)
         res.status(201).json(newUser);
-        console.log("New user (", newUser.username, ") has been registered");
+        console.log("User \'", newUser.username, "\' has been registered");
     }
     catch (error) {
-        console.error("authControlelr: Failed to register", error);
+        console.error("authController: Failed to register", error);
         res.status(500).json({message: "Error to register new user."})
     }
 }
@@ -38,6 +42,7 @@ export const login = async () => {
 
 }
 
+// Route logic for api/auth/user/<id>
 export const deleteUser = async (req: Request, res: Response) => {
     try {
         const userToDelete = await User.findByIdAndDelete(

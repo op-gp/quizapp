@@ -18,6 +18,12 @@ mongoose.connection.on('reconnected', () => {
     console.log('MongoDB reconnected');
 });
 
+process.once('SIGUSR2', async () => {
+  await mongoose.connection.close();
+  console.log('MongoDB connection closed due to nodemon restart');
+  process.kill(process.pid, 'SIGUSR2');
+});
+
 process.on('SIGINT', async () => {
     try {
         await mongoose.connection.close(false);
