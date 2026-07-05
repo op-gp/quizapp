@@ -12,7 +12,8 @@ const userSchema = new Schema({
     },
     role: {
         type: String,
-        enum: ['Student', 'Admin', 'SuperAdmin'],
+        enum: ['student', 'admin', 'superadmin'],
+        default: "student",
         required: true
     },
 }, {timestamps: true} // Adds createdAt and updatedAt attributes.
