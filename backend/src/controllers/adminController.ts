@@ -15,6 +15,10 @@ export const fetchUsers = async (req: Request, res: Response) => {
     }
 }
 
+export const createCategory = () => {
+    
+}
+
 // DELETE
 // Route logic for api/auth/user/<id>
 export const deleteUser = async (req: Request, res: Response) => {
