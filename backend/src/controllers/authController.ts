@@ -65,7 +65,9 @@ export const login = async (req: Request, res: Response) => {
         .json({ message: `User ${username} does not exist.` });
     }
 
+    // Compares to check if the password stored in the database is equivalent to the one entered.
     const isMatch = await bcrypt.compare(password, user.password);
+    // If not, return a 400 Bad Request status code.
     if (!isMatch) {
       return res.status(400).json({ message: "Invalid credentials" });
     }
@@ -73,6 +75,7 @@ export const login = async (req: Request, res: Response) => {
     const accessSecretToken = process.env.ACCESS_SECRET_TOKEN;
     const refreshSecretToken = process.env.REFRESH_SECRET_TOKEN;
 
+    // These two will check if the token environment variables were set, otherwise return a 500 Internal Server Error status code.
     if (!accessSecretToken) {
       console.error("ACCESS_SECRET_TOKEN not set in .env");
       return res.status(500).json({ message: "Missing access token" });
@@ -93,6 +96,7 @@ export const login = async (req: Request, res: Response) => {
       refreshSecretToken,
       { expiresIn: "7d" },
     );
+
 
     res.cookie("refreshToken", refreshToken, {
       httpOnly: true,
@@ -123,10 +127,12 @@ export const refreshToken = async (req: Request, res: Response) => {
     }
 
     const refreshSecretToken = process.env.REFRESH_SECRET_TOKEN;
+
     if (!refreshSecretToken) {
       console.error("REFRESH_SECRET_TOKEN not set in .env");
       return res.status(500).json({ message: "Missing refresh token" });
     }
+
     const decoded = jwt.verify(token, refreshSecretToken);
     const user = await User.findById(decoded.id);
 
@@ -136,7 +142,10 @@ export const refreshToken = async (req: Request, res: Response) => {
     }
 
     const newAccessToken = jwt.sign(
-      { id: user._id, role: user.role },
+      { 
+        id: user._id, 
+        role: user.role 
+    },
       refreshSecretToken,
       { expiresIn: "7d" },
     );
