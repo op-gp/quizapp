@@ -133,7 +133,15 @@ export const refreshToken = async (req: Request, res: Response) => {
       return res.status(500).json({ message: "Missing refresh token" });
     }
 
-    const decoded = jwt.verify(token, refreshSecretToken);
+    const decoded = jwt.verify(token, refreshSecretToken) as JwtPayload | string;
+
+    // IMPORTED BY CO-PILOT
+    if (typeof decoded === "string" || !decoded || typeof decoded.id !== "string") {
+      console.error("authController.ts: Invalid refresh token payload.");
+      return res.status(401).json({ message: "Invalid refresh token." });
+    }
+    // END OF CO-PILOT GENERATION.
+
     const user = await User.findById(decoded.id);
 
     if (!user) {
