@@ -1,63 +1,14 @@
-﻿import type { Request, Response, NextFunction } from 'express';
-import User from '../models/User.ts';
+﻿import { Response, NextFunction } from 'express';
 import { AuthRequest } from '../middleware/authMiddleware.ts';
-import { sendSuccess } from '../utils/response';
+import { sendSuccess } from '../utils/response.ts';
 import * as adminService from '../services/adminService.ts';
-
-export const fetchUsers = async (req: Request, res: Response) => {
-  try {
-    const users = await User.find();
-    res.status(200).json(users);
-  } catch (error) {
-    console.error('Error fetching all users', error);
-    res.status(500).json({ message: 'Error retrieving users', error });
-  }
-};
-
-export const getUsers = fetchUsers;
-
-export const deleteUser = async (req: AuthRequest, res: Response) => {
-  try {
-    const targetUserId = req.params.userId;
-    const callerUser = await User.findById(req.user?.userId);
-    const callerUserId = callerUser?.id;
-    const callerUserRole = callerUser?.role;
-
-    if (callerUserId === targetUserId) {
-      return res.status(400).json({ message: 'You cannot delete your own account.' });
-    }
-
-    const targetUser = await User.findById(targetUserId);
-
-    if (!targetUser) {
-      console.error('adminController.ts: User to be deleted does not exist.');
-      return res.status(404).json({ message: 'User does not exist' });
-    }
-
-    const isTargetAdmin = targetUser?.role === 'admin' || targetUser?.role === 'superadmin';
-    if (isTargetAdmin && callerUserRole !== 'superadmin') {
-      console.error('adminController.ts: Only super admins can delete admins.');
-      return res.status(403).json({ message: 'Only Super Admins can delete Admins.' });
-    }
-
-    const userToDelete = await User.findByIdAndDelete(targetUserId);
-
-    if (!userToDelete) {
-      console.error('User could not be found.');
-      return res.status(404).json({ message: 'User does not exist.' });
-    }
-
-    console.log('User (', userToDelete.username, ') has been successfully deleted.');
-    res.status(200).json({ message: 'User below has been deleted', username: userToDelete.username });
-  } catch (error) {
-    console.error('Error in deleteUser controller', error);
-    res.status(500).json({ message: 'Error in deleting user.' });
-  }
-};
+import * as authService from '../services/authService.ts';
+import { CustomError } from '../utils/CustomError.ts';
+import User from '../models/User.ts';
 
 export const createCategory = async (req: AuthRequest, res: Response, next: NextFunction) => {
   try {
-    const { name, description } = req.body as { name: string; description: string };
+    const { name, description } = req.body;
     const result = await adminService.createCategory(name, description);
     sendSuccess(res, 'Category created successfully', result, 201);
   } catch (error) {
@@ -65,30 +16,15 @@ export const createCategory = async (req: AuthRequest, res: Response, next: Next
   }
 };
 
-export const getCategories = async (req: Request, res: Response, next: NextFunction) => {
-  try {
-    const categories = await adminService.getCategories();
-    sendSuccess(res, 'Categories retrieved successfully', categories);
-  } catch (error) {
-    next(error);
-  }
-};
-
 export const createQuiz = async (req: AuthRequest, res: Response, next: NextFunction) => {
   try {
-    const { categoryId, title, description, timeLimit } = req.body as {
-      categoryId: string;
-      title: string;
-      description: string;
-      timeLimit: number;
-    };
-
+    const { categoryId, title, description, timeLimit } = req.body;
     const result = await adminService.createQuiz(
       categoryId,
       title,
       description,
-      Number(timeLimit),
-      req.user?.userId,
+      timeLimit,
+      req.user?.userId
     );
     sendSuccess(res, 'Quiz created successfully', result, 201);
   } catch (error) {
@@ -96,24 +32,11 @@ export const createQuiz = async (req: AuthRequest, res: Response, next: NextFunc
   }
 };
 
-export const getQuizzes = async (req: Request, res: Response, next: NextFunction) => {
+export const addQuestion = async (req: AuthRequest, res: Response, next: NextFunction) => {
   try {
-    const quizzes = await adminService.getQuizzes();
-    sendSuccess(res, 'Quizzes retrieved successfully', quizzes);
-  } catch (error) {
-    next(error);
-  }
-};
-
-export const addQuestion = async (req: Request, res: Response, next: NextFunction) => {
-  try {
-    const { questionText, points, options } = req.body as {
-      questionText: string;
-      points: number;
-      options: { optionText: string; isCorrect: boolean }[];
-    };
-    const { quizId } = req.params;
-    const result = await adminService.addQuestion(quizId, questionText, Number(points), options);
+    const { questionText, points, options } = req.body;
+    const quizId = req.params.quizId;
+    const result = await adminService.addQuestion(quizId, questionText, points, options);
     sendSuccess(res, 'Question added successfully', result, 201);
   } catch (error) {
     next(error);
@@ -122,63 +45,112 @@ export const addQuestion = async (req: Request, res: Response, next: NextFunctio
 
 export const createAdmin = async (req: AuthRequest, res: Response, next: NextFunction) => {
   try {
-    res.status(501).json({ message: 'createAdmin route not implemented yet' });
+    const { username, email } = req.body;
+    const result = await authService.inviteAdminUser(username, email);
+    sendSuccess(res, 'Admin user invited successfully. Setup link has been sent.', result, 201);
   } catch (error) {
     next(error);
   }
 };
 
-export const deleteCategory = async (req: Request, res: Response, next: NextFunction) => {
+export const getCategories = async (req: AuthRequest, res: Response, next: NextFunction) => {
   try {
-    const { categoryId } = req.params;
-    const result = await adminService.deleteCategory(categoryId);
-    sendSuccess(res, 'Category deleted successfully', result);
+    const result = await adminService.getCategories();
+    sendSuccess(res, 'Categories retrieved successfully', result, 200);
   } catch (error) {
     next(error);
   }
 };
 
-export const deleteQuiz = async (req: Request, res: Response, next: NextFunction) => {
+export const getQuizzes = async (req: AuthRequest, res: Response, next: NextFunction) => {
   try {
-    const { quizId } = req.params;
-    const result = await adminService.deleteQuiz(quizId);
-    sendSuccess(res, 'Quiz deleted successfully', result);
+    const result = await adminService.getQuizzes();
+    sendSuccess(res, 'Quizzes retrieved successfully', result, 200);
   } catch (error) {
     next(error);
   }
 };
 
-export const getQuestionsForQuiz = async (req: Request, res: Response, next: NextFunction) => {
+export const getUsers = async (req: AuthRequest, res: Response, next: NextFunction) => {
   try {
-    const { quizId } = req.params;
-    const questions = await adminService.getQuestionsForQuiz(quizId);
-    sendSuccess(res, 'Questions retrieved successfully', questions);
+    const result = await adminService.getUsers();
+    sendSuccess(res, 'Users retrieved successfully', result, 200);
   } catch (error) {
     next(error);
   }
 };
 
-export const deleteQuestion = async (req: Request, res: Response, next: NextFunction) => {
+export const deleteUser = async (req: AuthRequest, res: Response, next: NextFunction) => {
   try {
-    const { questionId } = req.params;
-    const result = await adminService.deleteQuestion(questionId);
-    sendSuccess(res, 'Question deleted successfully', result);
+    const targetUserId = req.params.userId;
+    const callerId = req.user?.userId;
+    const callerRole = req.user?.role;
+
+    if (targetUserId === callerId) {
+      throw new CustomError('You cannot delete your own account', 400);
+    }
+
+    const targetUser = await User.findById(targetUserId);
+    if (!targetUser) {
+      throw new CustomError('User not found', 404);
+    }
+
+    const isTargetAdmin = targetUser.role === 'Admin' || targetUser.role === 'SuperAdmin';
+    if (isTargetAdmin && callerRole !== 'SuperAdmin') {
+      throw new CustomError('Access denied. Administrator accounts can only be deleted by a Super Admin.', 403);
+    }
+
+    const result = await adminService.deleteUser(targetUserId);
+    sendSuccess(res, result.message, null, 200);
   } catch (error) {
     next(error);
   }
 };
 
-export const editQuestion = async (req: Request, res: Response, next: NextFunction) => {
+export const deleteCategory = async (req: AuthRequest, res: Response, next: NextFunction) => {
   try {
-    const { questionId } = req.params;
-    const { questionText, points, options } = req.body as {
-      questionText: string;
-      points: number;
-      options: { optionText: string; isCorrect: boolean }[];
-    };
-    const result = await adminService.editQuestion(questionId, questionText, Number(points), options);
-    sendSuccess(res, 'Question updated successfully', result);
+    const result = await adminService.deleteCategory(req.params.categoryId);
+    sendSuccess(res, result.message, null, 200);
   } catch (error) {
     next(error);
   }
 };
+
+export const deleteQuiz = async (req: AuthRequest, res: Response, next: NextFunction) => {
+  try {
+    const result = await adminService.deleteQuiz(req.params.quizId);
+    sendSuccess(res, result.message, null, 200);
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const deleteQuestion = async (req: AuthRequest, res: Response, next: NextFunction) => {
+  try {
+    const result = await adminService.deleteQuestion(req.params.questionId);
+    sendSuccess(res, result.message, null, 200);
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const editQuestion = async (req: AuthRequest, res: Response, next: NextFunction) => {
+  try {
+    const { questionText, points, options } = req.body;
+    const result = await adminService.editQuestion(req.params.questionId, questionText, points, options);
+    sendSuccess(res, 'Question updated successfully', result, 200);
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const getQuestionsForQuiz = async (req: AuthRequest, res: Response, next: NextFunction) => {
+  try {
+    const result = await adminService.getQuestionsForQuiz(req.params.quizId);
+    sendSuccess(res, 'Questions retrieved successfully', result, 200);
+  } catch (error) {
+    next(error);
+  }
+};
+
+

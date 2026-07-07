@@ -1,5 +1,5 @@
 import express from 'express';
-import * as adminController from "../controllers/adminController.ts";
+import { createCategory, createQuiz, addQuestion, createAdmin, getCategories, getQuizzes, getUsers, deleteUser, deleteCategory, deleteQuiz, deleteQuestion, editQuestion, getQuestionsForQuiz } from '../controllers/adminController.ts';
 import { verifyRole, verifyToken } from "../middleware/authMiddleware.ts";
 
 const router = express.Router();
@@ -7,7 +7,7 @@ const router = express.Router();
 router.use(verifyToken);
 router.use(verifyRole(['admin']));
 
-router.post('/categories', adminController.createCategory);
+router.post('/categories', createCategory);
 router.get('/categories', adminController.getCategories);
 
 router.post('/quizzes', adminController.createQuiz);

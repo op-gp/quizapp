@@ -1,4 +1,4 @@
-import mongoose, { Schema, model } from 'mongoose';
+import mongoose, { Schema, model, Document} from 'mongoose';
 
 export interface IAttemptAnswer {
   questionId: Schema.Types.ObjectId;

@@ -3,9 +3,9 @@ import jwt from 'jsonwebtoken';
 
 export interface AuthRequest extends Request {
   user?: {
-    userId: string,
-    role: 'student' | 'admin' | 'superadmin';
-  }
+    userId: string;
+    role: 'Admin' | 'Student' | 'SuperAdmin';
+  };
 }
 
 export const verifyToken = (req: any, res: any, next: any) => {
@@ -34,7 +34,7 @@ export const verifyToken = (req: any, res: any, next: any) => {
     })
 }
 
-export const verifyRole = (allowedRoles: ('student' | 'admin' | 'superadmin')[]) => {
+export const verifyRole = (allowedRoles: ('Admin' | 'Student' | 'SuperAdmin')[]) => {
   return (req: any, res: any, next: any) => {
     const userRole = req.user?.role;
 
@@ -43,8 +43,8 @@ export const verifyRole = (allowedRoles: ('student' | 'admin' | 'superadmin')[])
     }
 
     // SuperAdmin automatically pass role checks intended for admins
-    const isSuperAdmin = req.user.role === 'superadmin';
-    const isAllowed = allowedRoles.includes(req.user.role) || (isSuperAdmin && allowedRoles.includes('admin'));
+    const isSuperAdmin = req.user.role === 'SuperAdmin';
+    const isAllowed = allowedRoles.includes(req.user.role) || (isSuperAdmin && allowedRoles.includes('Admin'));
 
     if (!isAllowed) {
       res.status(403).json({ error: 'Access denied. Insufficient permissions.' });
