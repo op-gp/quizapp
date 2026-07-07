@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { useAuth } from "../context/AuthContext.tsx";
-import { login as apiLogin, verifyLogin } from "../api/auth.ts";
+import { useAuth } from "../context/AuthContext";
+import { login as apiLogin, verifyLogin } from "../api/auth";
 import { toast } from "sonner";
-import { Button } from "../components/ui/button.tsx";
+import { Button } from "../components/ui/button";
 import {
   Card,
   CardHeader,
@@ -94,9 +94,6 @@ export default function AdminLogin() {
       {/* Decorative ambient background glows */}
       <div className="absolute top-[-20%] left-[-20%] w-[60%] h-[60%] rounded-full bg-indigo-900/10 blur-[120px] pointer-events-none" />
       <div className="absolute bottom-[-20%] right-[-20%] w-[60%] h-[60%] rounded-full bg-violet-950/20 blur-[120px] pointer-events-none" />
-      <Link to="/login">
-        <Card className="p-2 btn btn-primary mt-2">Go back to login page.</Card>
-      </Link>
       <Card className="w-full max-w-md border-slate-800 bg-slate-900/40 backdrop-blur-xl shadow-2xl relative z-10">
         <CardHeader className="text-center space-y-2">
           <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-lg bg-indigo-500/10 text-indigo-400 border border-indigo-500/20">
@@ -219,6 +216,14 @@ export default function AdminLogin() {
               </Button>
             </form>
           )}
+          <div className="text-center mt-4">
+            <Link
+              to="/login"
+              className="text-xs text-slate-500 hover:text-slate-400 hover:underline transition-all duration-300"
+            >
+              Return to Login page here.
+            </Link>
+          </div>
         </CardContent>
       </Card>
     </div>

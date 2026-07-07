@@ -1,23 +1,10 @@
-import React, { useState, useEffect } from "react";
-import { useLocation, useParams, useNavigate, Link } from "react-router-dom";
-import { getQuizLeaderboard } from "../api/student";
-import { Button } from "../components/ui/button";
-import {
-  Card,
-  CardHeader,
-  CardTitle,
-  CardDescription,
-  CardContent,
-} from "../components/ui/card";
-import { Alert, AlertDescription } from "../components/ui/alert";
-import {
-  Trophy,
-  Clock,
-  Award,
-  ArrowLeft,
-  RefreshCw,
-  BarChart2,
-} from "lucide-react";
+import React, { useState, useEffect } from 'react';
+import { useLocation, useParams, useNavigate, Link } from 'react-router-dom';
+import { getQuizLeaderboard } from '../api/student';
+import { Button } from '../components/ui/button';
+import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '../components/ui/card';
+import { Alert, AlertDescription } from '../components/ui/alert';
+import { Trophy, Clock, Award, ArrowLeft, RefreshCw, BarChart2 } from 'lucide-react';
 
 interface LeaderboardEntry {
   _id: string;
@@ -48,7 +35,7 @@ export default function Results() {
   useEffect(() => {
     // If no state results are present, redirect to dashboard to prevent crash
     if (!stateResult) {
-      navigate("/dashboard");
+      navigate('/dashboard');
       return;
     }
 
@@ -58,7 +45,7 @@ export default function Results() {
         const response = await getQuizLeaderboard(quizId!);
         setLeaderboard(response.data.data);
       } catch (err: any) {
-        console.error("Error fetching leaderboard:", err);
+        console.error('Error fetching leaderboard:', err);
       } finally {
         setLoadingLeaderboard(false);
       }
@@ -93,15 +80,11 @@ export default function Results() {
       {/* Header */}
       <header className="border-b border-slate-900 bg-slate-950/80 backdrop-blur-md sticky top-0 z-30 px-6 py-4 flex items-center justify-between">
         <div className="space-y-1">
-          <h1 className="text-lg font-bold text-white uppercase">
-            Quiz Results
-          </h1>
-          <p className="text-xs text-slate-400">
-            {stateQuiz?.title || "Attempt Finished"}
-          </p>
+          <h1 className="text-lg font-bold text-white uppercase">Quiz Results</h1>
+          <p className="text-xs text-slate-400">{stateQuiz?.title || 'Attempt Finished'}</p>
         </div>
-        <Button
-          onClick={() => navigate("/dashboard")}
+        <Button 
+          onClick={() => navigate('/dashboard')}
           variant="outline"
           className="border-slate-800 hover:bg-slate-900 text-slate-300 hover:text-white flex items-center gap-2 h-9 px-4 rounded-lg text-sm"
         >
@@ -111,13 +94,13 @@ export default function Results() {
 
       {/* Main content grid */}
       <main className="flex-1 max-w-7xl mx-auto w-full p-6 grid grid-cols-1 lg:grid-cols-3 gap-6 relative z-10">
+        
         {/* Left Side: Score card Summary */}
         <section className="lg:col-span-1 space-y-6">
           <Card className="border-slate-900 bg-slate-900/20 backdrop-blur-md text-center p-6 space-y-6">
+            
             <div className="space-y-2">
-              <h2 className="text-xs font-semibold text-slate-400 uppercase tracking-wider">
-                Your Performance
-              </h2>
+              <h2 className="text-xs font-semibold text-slate-400 uppercase tracking-wider">Your Performance</h2>
               <p className="text-sm text-slate-500">Graded attempt results</p>
             </div>
 
@@ -138,7 +121,7 @@ export default function Results() {
                   cy="80"
                   r="70"
                   strokeWidth="8"
-                  stroke={isPassed ? "#6366f1" : "#ef4444"}
+                  stroke={isPassed ? '#6366f1' : '#ef4444'}
                   fill="transparent"
                   strokeDasharray={440}
                   strokeDashoffset={440 - (440 * percentage) / 100}
@@ -146,15 +129,9 @@ export default function Results() {
                 />
               </svg>
               <div className="absolute flex flex-col items-center justify-center">
-                <span className="text-4xl font-extrabold text-white tracking-tight">
-                  {percentage}%
-                </span>
-                <span
-                  className={`text-[10px] uppercase tracking-widest font-bold mt-1 ${
-                    isPassed ? "text-indigo-400" : "text-red-400"
-                  }`}
-                >
-                  {isPassed ? "Passed" : "Failed"}
+                <span className="text-4xl font-extrabold text-white tracking-tight">{percentage}%</span>
+                <span className={`text-[10px] uppercase tracking-widest font-bold mt-1 ${isPassed ? 'text-indigo-400' : 'text-red-400'}`}>
+                  {isPassed ? 'Passed' : 'Failed'}
                 </span>
               </div>
             </div>
@@ -166,10 +143,7 @@ export default function Results() {
                   <Award className="h-3.5 w-3.5 text-indigo-400" /> Score Ratio
                 </span>
                 <span className="text-lg font-bold text-white">
-                  {stateResult.score}{" "}
-                  <span className="text-xs text-slate-500 font-normal">
-                    / {stateResult.totalPoints}
-                  </span>
+                  {stateResult.score} <span className="text-xs text-slate-500 font-normal">/ {stateResult.totalPoints}</span>
                 </span>
               </div>
               <div className="p-3 bg-slate-950/40 border border-slate-900 rounded-xl space-y-1">
@@ -191,13 +165,14 @@ export default function Results() {
                 <RefreshCw className="h-4 w-4 mr-2" /> Retake Quiz Attempt
               </Button>
               <Button
-                onClick={() => navigate("/dashboard")}
+                onClick={() => navigate('/dashboard')}
                 variant="outline"
                 className="w-full border-slate-800 hover:bg-slate-900 text-slate-300 hover:text-white"
               >
                 Back to Dashboard
               </Button>
             </div>
+
           </Card>
         </section>
 
@@ -207,16 +182,13 @@ export default function Results() {
             <div className="flex items-center justify-between mb-6">
               <div className="space-y-1">
                 <CardTitle className="text-lg font-bold text-white flex items-center gap-2">
-                  <Trophy className="h-5 w-5 text-yellow-500 animate-pulse" />{" "}
-                  Quiz Leaderboard
+                  <Trophy className="h-5 w-5 text-yellow-500 animate-pulse" /> Quiz Leaderboard
                 </CardTitle>
                 <CardDescription className="text-slate-400 text-sm">
                   Top performing students on this quiz challenge
                 </CardDescription>
               </div>
-              {loadingLeaderboard && (
-                <div className="h-5 w-5 animate-spin rounded-full border-2 border-indigo-500 border-t-transparent" />
-              )}
+              {loadingLeaderboard && <div className="h-5 w-5 animate-spin rounded-full border-2 border-indigo-500 border-t-transparent" />}
             </div>
 
             {leaderboard.length === 0 ? (
@@ -239,46 +211,30 @@ export default function Results() {
                     {leaderboard.map((entry, index) => {
                       const rank = index + 1;
                       const isTopRank = rank <= 3;
-
+                      
                       return (
-                        <tr
-                          key={entry._id}
-                          className="hover:bg-slate-900/30 transition-all text-slate-300"
-                        >
+                        <tr key={entry._id} className="hover:bg-slate-900/30 transition-all text-slate-300">
                           <td className="p-4 font-bold">
                             {isTopRank ? (
-                              <span
-                                className={`inline-flex h-6 w-6 items-center justify-center rounded-full text-xs ${
-                                  rank === 1
-                                    ? "bg-yellow-500/10 text-yellow-500 border border-yellow-500/20"
-                                    : rank === 2
-                                    ? "bg-slate-400/10 text-slate-300 border border-slate-400/20"
-                                    : "bg-amber-600/10 text-amber-500 border border-amber-600/20"
-                                }`}
-                              >
+                              <span className={`inline-flex h-6 w-6 items-center justify-center rounded-full text-xs ${
+                                rank === 1 ? 'bg-yellow-500/10 text-yellow-500 border border-yellow-500/20' :
+                                rank === 2 ? 'bg-slate-400/10 text-slate-300 border border-slate-400/20' :
+                                'bg-amber-600/10 text-amber-500 border border-amber-600/20'
+                              }`}>
                                 {rank}
                               </span>
                             ) : (
-                              <span className="text-slate-500 pl-2">
-                                {rank}
-                              </span>
+                              <span className="text-slate-500 pl-2">{rank}</span>
                             )}
                           </td>
                           <td className="p-4 font-semibold text-white">
-                            {entry.userId?.username || "Anonymous student"}
+                            {entry.userId?.username || 'Anonymous student'}
                           </td>
                           <td className="p-4">
-                            <span className="font-bold text-white">
-                              {entry.score}
-                            </span>
-                            <span className="text-slate-500 text-xs font-normal">
-                              {" "}
-                              / {entry.totalPoints}
-                            </span>
+                            <span className="font-bold text-white">{entry.score}</span>
+                            <span className="text-slate-500 text-xs font-normal"> / {entry.totalPoints}</span>
                           </td>
-                          <td className="p-4 font-mono text-xs">
-                            {formatTime(entry.timeTakenSeconds)}
-                          </td>
+                          <td className="p-4 font-mono text-xs">{formatTime(entry.timeTakenSeconds)}</td>
                           <td className="p-4 text-right text-xs text-slate-500">
                             {new Date(entry.createdAt).toLocaleDateString()}
                           </td>
@@ -291,6 +247,7 @@ export default function Results() {
             )}
           </Card>
         </section>
+
       </main>
     </div>
   );

@@ -1,21 +1,19 @@
-import React from "react";
-import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
-import { AuthProvider, useAuth } from "./context/AuthContext.tsx";
-import { Toaster } from "./components/ui/sonner";
-import Login from "./pages/Login.tsx";
-import AdminLogin from "./pages/AdminLogin.tsx";
-import Register from "./pages/Register.tsx";
-import ForgotPassword from "./pages/ForgetPassword.tsx";
-import ResetPassword from "./pages/ResetPassword.tsx";
-import CompleteRegistration from "./pages/CompleteRegistration.tsx";
-import Dashboard from "./pages/Dashboard.tsx";
-import QuizPlay from "./pages/QuizPlay.tsx";
-import Results from "./pages/Results.tsx";
+import React from 'react';
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { AuthProvider, useAuth } from './context/AuthContext';
+import { Toaster } from './components/ui/sonner';
+import Login from './pages/Login';
+import AdminLogin from './pages/AdminLogin';
+import Register from './pages/Register';
+import ForgotPassword from './pages/ForgotPassword';
+import ResetPassword from './pages/ResetPassword';
+import CompleteRegistration from './pages/CompleteRegistration';
+import Dashboard from './pages/Dashboard';
+import QuizPlay from './pages/QuizPlay';
+import Results from './pages/Results';
 
 // Router Guard: Accessible only to authenticated users (Students & Admins)
-const ProtectedRoute: React.FC<{ children: React.ReactNode }> = ({
-  children,
-}) => {
+const ProtectedRoute: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const { user, loading } = useAuth();
 
   if (loading) {
@@ -45,7 +43,7 @@ const AdminRoute: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     );
   }
 
-  if (!user || (user.role !== "Admin" && user.role !== "SuperAdmin")) {
+  if (!user || (user.role !== 'Admin' && user.role !== 'SuperAdmin')) {
     return <Navigate to="/dashboard" replace />;
   }
 
@@ -63,10 +61,7 @@ export default function App() {
           <Route path="/register" element={<Register />} />
           <Route path="/forgot-password" element={<ForgotPassword />} />
           <Route path="/reset-password" element={<ResetPassword />} />
-          <Route
-            path="/complete-registration"
-            element={<CompleteRegistration />}
-          />
+          <Route path="/complete-registration" element={<CompleteRegistration />} />
 
           {/* Secure Protected Routes */}
           <Route

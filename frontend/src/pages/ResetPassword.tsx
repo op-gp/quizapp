@@ -1,36 +1,26 @@
-import React, { useState, useEffect } from "react";
-import { useNavigate, useLocation, Link } from "react-router-dom";
-import { resetPassword } from "../api/auth.ts";
-import { toast } from "sonner";
-import { Button } from "../components/ui/button.tsx";
-import {
-  Card,
-  CardHeader,
-  CardTitle,
-  CardDescription,
-  CardContent,
-} from "../components/ui/card.tsx";
-import {
-  Alert,
-  AlertDescription,
-  AlertTitle,
-} from "../components/ui/alert.tsx";
-import { KeyRound, Lock, ArrowLeft, CheckCircle2 } from "lucide-react";
+import React, { useState, useEffect } from 'react';
+import { useNavigate, useLocation, Link } from 'react-router-dom';
+import { resetPassword } from '../api/auth';
+import { toast } from 'sonner';
+import { Button } from '../components/ui/button';
+import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '../components/ui/card';
+import { Alert, AlertDescription, AlertTitle } from '../components/ui/alert';
+import { KeyRound, Lock, ArrowLeft, CheckCircle2 } from 'lucide-react';
 
 export default function ResetPassword() {
-  const [token, setToken] = useState("");
-  const [newPassword, setNewPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
+  const [token, setToken] = useState('');
+  const [newPassword, setNewPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState(false);
   const [loading, setLoading] = useState(false);
-
+  
   const navigate = useNavigate();
   const location = useLocation();
 
   useEffect(() => {
     const searchParams = new URLSearchParams(location.search);
-    const queryToken = searchParams.get("token");
+    const queryToken = searchParams.get('token');
     if (queryToken) {
       setToken(queryToken);
     }
@@ -41,17 +31,17 @@ export default function ResetPassword() {
     setError(null);
 
     if (newPassword !== confirmPassword) {
-      setError("Passwords do not match.");
+      setError('Passwords do not match.');
       return;
     }
 
     if (newPassword.length < 6) {
-      setError("Password must be at least 6 characters long.");
+      setError('Password must be at least 6 characters long.');
       return;
     }
 
     if (!token.trim()) {
-      setError("Password reset token is required.");
+      setError('Password reset token is required.');
       return;
     }
 
@@ -60,16 +50,13 @@ export default function ResetPassword() {
     try {
       await resetPassword({ token, newPassword });
       setSuccess(true);
-      toast.success("Password reset successfully!");
+      toast.success('Password reset successfully!');
       setTimeout(() => {
-        navigate("/login");
+        navigate('/login');
       }, 1500);
     } catch (err: any) {
       console.error(err);
-      const msg =
-        err.response?.data?.message ||
-        err.response?.data?.error ||
-        "Reset failed. The token may be invalid or expired.";
+      const msg = err.response?.data?.message || err.response?.data?.error || 'Reset failed. The token may be invalid or expired.';
       setError(msg);
       toast.error(msg);
     } finally {
@@ -102,31 +89,23 @@ export default function ResetPassword() {
               <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-emerald-500/10 text-emerald-400">
                 <CheckCircle2 className="h-10 w-10 animate-bounce" />
               </div>
-              <Alert
-                variant="success"
-                className="bg-emerald-500/10 border-emerald-500/20 text-emerald-400"
-              >
+              <Alert variant="success" className="bg-emerald-500/10 border-emerald-500/20 text-emerald-400">
                 <AlertTitle className="font-bold">Password Reset!</AlertTitle>
-                <AlertDescription>
-                  Your password has been updated. Redirecting to login...
-                </AlertDescription>
+                <AlertDescription>Your password has been updated. Redirecting to login...</AlertDescription>
               </Alert>
             </div>
           ) : (
             <form onSubmit={handleSubmit} className="space-y-4">
               {error && (
-                <Alert
-                  variant="destructive"
-                  className="bg-red-500/10 border-red-500/20 text-red-400"
-                >
+                <Alert variant="destructive" className="bg-red-500/10 border-red-500/20 text-red-400">
                   <AlertDescription>{error}</AlertDescription>
                 </Alert>
               )}
 
+
+
               <div className="space-y-2">
-                <label className="text-sm font-medium text-slate-300">
-                  New Password
-                </label>
+                <label className="text-sm font-medium text-slate-300">New Password</label>
                 <div className="relative">
                   <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none text-slate-500">
                     <Lock className="h-5 w-5" />
@@ -143,9 +122,7 @@ export default function ResetPassword() {
               </div>
 
               <div className="space-y-2">
-                <label className="text-sm font-medium text-slate-300">
-                  Confirm New Password
-                </label>
+                <label className="text-sm font-medium text-slate-300">Confirm New Password</label>
                 <div className="relative">
                   <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none text-slate-500">
                     <Lock className="h-5 w-5" />

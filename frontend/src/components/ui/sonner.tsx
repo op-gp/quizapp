@@ -1,6 +1,6 @@
-import { Toaster as RadixToaster } from "sonner";
+import { Toaster as RadixToaster } from "sonner"
 
-type ToasterProps = React.ComponentProps<typeof RadixToaster>;
+type ToasterProps = React.ComponentProps<typeof RadixToaster>
 
 const Toaster = ({ ...props }: ToasterProps) => {
   return (
@@ -19,7 +19,7 @@ const Toaster = ({ ...props }: ToasterProps) => {
       }}
       {...props}
     />
-  );
-};
+  )
+}
 
-export { Toaster };
+export { Toaster }

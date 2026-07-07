@@ -1,26 +1,14 @@
-import React, { useState } from "react";
-import { useNavigate, Link } from "react-router-dom";
-import { forgotPassword } from "../api/auth.ts";
-import { toast } from "sonner";
-import { Button } from "../components/ui/button.tsx";
-import {
-  Card,
-  CardHeader,
-  CardTitle,
-  CardDescription,
-  CardContent,
-} from "../components/ui/card.tsx";
-import { Alert, AlertDescription } from "../components/ui/alert.tsx";
-import {
-  KeyRound,
-  Mail,
-  ArrowLeft,
-  Clipboard,
-  CheckCircle2,
-} from "lucide-react";
+import React, { useState } from 'react';
+import { useNavigate, Link } from 'react-router-dom';
+import { forgotPassword } from '../api/auth';
+import { toast } from 'sonner';
+import { Button } from '../components/ui/button';
+import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '../components/ui/card';
+import { Alert, AlertDescription } from '../components/ui/alert';
+import { KeyRound, Mail, ArrowLeft, Clipboard, CheckCircle2 } from 'lucide-react';
 
 export default function ForgotPassword() {
-  const [email, setEmail] = useState("");
+  const [email, setEmail] = useState('');
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
@@ -33,13 +21,10 @@ export default function ForgotPassword() {
     try {
       await forgotPassword({ email });
       setSuccess(true);
-      toast.success("Password reset link sent successfully!");
+      toast.success('Password reset link sent successfully!');
     } catch (err: any) {
       console.error(err);
-      const msg =
-        err.response?.data?.message ||
-        err.response?.data?.error ||
-        "Could not request password reset. Make sure the email is registered.";
+      const msg = err.response?.data?.message || err.response?.data?.error || 'Could not request password reset. Make sure the email is registered.';
       setError(msg);
       toast.error(msg);
     } finally {
@@ -62,8 +47,7 @@ export default function ForgotPassword() {
             Reset Password
           </CardTitle>
           <CardDescription className="text-slate-400">
-            Enter your email and we'll log/generate a password reset link for
-            you
+            Enter your email and we'll log/generate a password reset link for you
           </CardDescription>
         </CardHeader>
 
@@ -75,8 +59,7 @@ export default function ForgotPassword() {
               </div>
               <Alert className="bg-emerald-500/10 border-emerald-500/20 text-emerald-400 text-center">
                 <AlertDescription className="font-semibold text-sm">
-                  We have sent a password reset link to your registered email
-                  address. Please check your inbox.
+                  We have sent a password reset link to your registered email address. Please check your inbox.
                 </AlertDescription>
               </Alert>
               <Link to="/login">
@@ -88,18 +71,13 @@ export default function ForgotPassword() {
           ) : (
             <form onSubmit={handleSubmit} className="space-y-4">
               {error && (
-                <Alert
-                  variant="destructive"
-                  className="bg-red-500/10 border-red-500/20 text-red-400"
-                >
+                <Alert variant="destructive" className="bg-red-500/10 border-red-500/20 text-red-400">
                   <AlertDescription>{error}</AlertDescription>
                 </Alert>
               )}
 
               <div className="space-y-2">
-                <label className="text-sm font-medium text-slate-300">
-                  Email Address
-                </label>
+                <label className="text-sm font-medium text-slate-300">Email Address</label>
                 <div className="relative">
                   <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none text-slate-500">
                     <Mail className="h-5 w-5" />

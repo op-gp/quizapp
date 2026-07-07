@@ -1,45 +1,29 @@
-import React, { useState, useEffect } from "react";
-import { useNavigate, useLocation, Link } from "react-router-dom";
-import { completeRegistration } from "../api/auth.ts";
-import { Button } from "../components/ui/button.tsx";
-import {
-  Card,
-  CardHeader,
-  CardTitle,
-  CardDescription,
-  CardContent,
-} from "../components/ui/card.tsx";
-import {
-  Alert,
-  AlertDescription,
-  AlertTitle,
-} from "../components/ui/alert.tsx";
-import {
-  KeyRound,
-  Lock,
-  ArrowLeft,
-  CheckCircle2,
-  UserCheck,
-} from "lucide-react";
+import React, { useState, useEffect } from 'react';
+import { useNavigate, useLocation, Link } from 'react-router-dom';
+import { completeRegistration } from '../api/auth';
+import { Button } from '../components/ui/button';
+import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '../components/ui/card';
+import { Alert, AlertDescription, AlertTitle } from '../components/ui/alert';
+import { KeyRound, Lock, ArrowLeft, CheckCircle2, UserCheck } from 'lucide-react';
 
 export default function CompleteRegistration() {
-  const [token, setToken] = useState("");
-  const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
+  const [token, setToken] = useState('');
+  const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState(false);
   const [loading, setLoading] = useState(false);
-
+  
   const navigate = useNavigate();
   const location = useLocation();
 
   useEffect(() => {
     const searchParams = new URLSearchParams(location.search);
-    const queryToken = searchParams.get("token");
+    const queryToken = searchParams.get('token');
     if (queryToken) {
       setToken(queryToken);
     } else {
-      setError("Invalid registration link. Token parameter is missing.");
+      setError('Invalid registration link. Token parameter is missing.');
     }
   }, [location]);
 
@@ -48,17 +32,17 @@ export default function CompleteRegistration() {
     setError(null);
 
     if (password !== confirmPassword) {
-      setError("Passwords do not match.");
+      setError('Passwords do not match.');
       return;
     }
 
     if (password.length < 6) {
-      setError("Password must be at least 6 characters long.");
+      setError('Password must be at least 6 characters long.');
       return;
     }
 
     if (!token.trim()) {
-      setError("Registration token is required.");
+      setError('Registration token is required.');
       return;
     }
 
@@ -68,14 +52,14 @@ export default function CompleteRegistration() {
       await completeRegistration({ token, password });
       setSuccess(true);
       setTimeout(() => {
-        navigate("/admin/login");
+        navigate('/admin/login');
       }, 2000);
     } catch (err: any) {
       console.error(err);
       setError(
-        err.response?.data?.message ||
-          err.response?.data?.error ||
-          "Failed to complete registration. The link may be invalid or expired."
+        err.response?.data?.message || 
+        err.response?.data?.error || 
+        'Failed to complete registration. The link may be invalid or expired.'
       );
     } finally {
       setLoading(false);
@@ -107,33 +91,23 @@ export default function CompleteRegistration() {
               <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-emerald-500/10 text-emerald-400">
                 <CheckCircle2 className="h-10 w-10 animate-bounce" />
               </div>
-              <Alert
-                variant="success"
-                className="bg-emerald-500/10 border-emerald-500/20 text-emerald-400"
-              >
-                <AlertTitle className="font-bold">
-                  Account Activated!
-                </AlertTitle>
-                <AlertDescription>
-                  Your password is registered. Redirecting to admin login...
-                </AlertDescription>
+              <Alert variant="success" className="bg-emerald-500/10 border-emerald-500/20 text-emerald-400">
+                <AlertTitle className="font-bold">Account Activated!</AlertTitle>
+                <AlertDescription>Your password is registered. Redirecting to admin login...</AlertDescription>
               </Alert>
             </div>
           ) : (
             <form onSubmit={handleSubmit} className="space-y-4">
               {error && (
-                <Alert
-                  variant="destructive"
-                  className="bg-red-500/10 border-red-500/20 text-red-400"
-                >
+                <Alert variant="destructive" className="bg-red-500/10 border-red-500/20 text-red-400">
                   <AlertDescription>{error}</AlertDescription>
                 </Alert>
               )}
 
+
+
               <div className="space-y-2">
-                <label className="text-sm font-medium text-slate-300">
-                  Create Password
-                </label>
+                <label className="text-sm font-medium text-slate-300">Create Password</label>
                 <div className="relative">
                   <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none text-slate-500">
                     <Lock className="h-5 w-5" />
@@ -150,9 +124,7 @@ export default function CompleteRegistration() {
               </div>
 
               <div className="space-y-2">
-                <label className="text-sm font-medium text-slate-300">
-                  Confirm Password
-                </label>
+                <label className="text-sm font-medium text-slate-300">Confirm Password</label>
                 <div className="relative">
                   <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none text-slate-500">
                     <Lock className="h-5 w-5" />

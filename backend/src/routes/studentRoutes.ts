@@ -1,5 +1,5 @@
 import express from 'express';
-import { getQuizzes, startQuizAttempt, submitQuizAttempt, getAttemptsHistory, getLeaderboard } from '../controllers/studentController.ts';}
+import { getQuizzes, startQuizAttempt, submitQuizAttempt, getAttemptsHistory, getLeaderboard } from '../controllers/studentController.ts';
 import { verifyRole, verifyToken } from '../middleware/authMiddleware.ts';
 
 const router = express.Router();

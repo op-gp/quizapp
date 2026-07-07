@@ -5,6 +5,7 @@ import { connectDB } from './configs/db.ts';
 import type {Request, Response} from 'express';
 import { errorHandler } from './middleware/errorMiddleware.ts';
 import path from 'path';
+import { fileURLToPath } from 'url';
 
 // Import routes
 import authRoutes from './routes/authRoutes.ts';
@@ -13,6 +14,10 @@ import studentRoutes from './routes/studentRoutes.ts';
 
 // Loads environment variables into the process.
 dotenv.config();
+
+// ESM compatibility: create __filename and __dirname equivalents
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 
 // Validate critical environment variables before startup
@@ -72,14 +77,17 @@ app.get('/api', (req: Request, res: Response) => {
 // Global Error Handler Middleware (must be registered last)
 app.use(errorHandler);
 
-// 1. Serve the frontend static assets
-// const frontendBuildPath = path.join(__dirname, '../../frontend/dist');
-// app.use(express.static(frontendBuildPath));
+if (process.env.NODE_ENV === "production"){
+  // 1. Serve the frontend static assets
+  const frontendBuildPath = path.join(__dirname, '../../frontend/dist');
+  app.use(express.static(frontendBuildPath));
 
-// 2. Fallback route: serve index.html for any non-API routes (enables React Router)
-// app.get('*', (req: Request, res: Response) => {
-//   res.sendFile(path.join(frontendBuildPath, 'index.html'));
-// });
+  // 2. Fallback route: serve index.html for any non-API routes (enables React Router)
+  // Use a RegExp route to avoid path-to-regexp parsing of unnamed parameters
+  app.get(/^\/.*$/, (req: Request, res: Response) => {
+    res.sendFile(path.join(frontendBuildPath, 'index.html'));
+  });
+}
 
 // First connect to the database and only after a successfull connection will the application start.
 // REASON: No reason for the application to start if it can't access the database to perform HTTP requests.

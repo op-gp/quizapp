@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
-import { useAuth } from "../context/AuthContext.tsx";
-import { login as apiLogin, verifyLogin } from "../api/auth.ts";
+import { useAuth } from "../context/AuthContext";
+import { login as apiLogin, verifyLogin } from "../api/auth";
 import { toast } from "sonner";
-import { Button } from "../components/ui/button.tsx";
+import { Button } from "../components/ui/button";
 import {
   Card,
   CardHeader,
@@ -233,7 +233,7 @@ export default function Login() {
                     Sign Up <ArrowRight className="h-3.5 w-3.5 ml-1" />
                   </Link>
                 </div>
-                <div>
+                <div className="">
                   <Link
                     to="/admin/login"
                     className="text-xs text-slate-500 hover:text-slate-400 hover:underline transition-all duration-300"

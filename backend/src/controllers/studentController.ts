@@ -1,7 +1,7 @@
-import { Response, NextFunction } from 'express';
-import { AuthRequest } from '../middleware/authMiddleware';
-import { sendSuccess } from '../utils/response';
-import * as studentService from '../services/studentService';
+import type { Response, NextFunction } from 'express';
+import type { AuthRequest } from '../middleware/authMiddleware.ts';
+import { sendSuccess } from '../utils/response.ts';
+import * as studentService from '../services/studentService.ts';
 
 export const getQuizzes = async (req: AuthRequest, res: Response, next: NextFunction) => {
   try {

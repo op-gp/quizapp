@@ -1,4 +1,4 @@
-import api from '../utils/api.ts';
+import api from '../utils/api';
 
 export const getAdminCategories = () => api.get('/admin/categories');
 export const getAdminQuizzes = () => api.get('/admin/quizzes');
