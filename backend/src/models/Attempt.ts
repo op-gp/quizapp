@@ -1,14 +1,14 @@
 import mongoose, { Schema, model, Document} from 'mongoose';
 
 export interface IAttemptAnswer {
-  questionId: Schema.Types.ObjectId;
-  selectedOptionId: Schema.Types.ObjectId | null;
+  questionId: mongoose.Types.ObjectId | string;
+  selectedOptionId: mongoose.Types.ObjectId | string | null;
   isCorrect: boolean;
 }
 
 export interface IAttempt extends Document {
-  userId: Schema.Types.ObjectId;
-  quizId: Schema.Types.ObjectId;
+  userId: mongoose.Types.ObjectId | string;
+  quizId: mongoose.Types.ObjectId | string;
   score: number;
   totalPoints: number;
   timeTakenSeconds: number;

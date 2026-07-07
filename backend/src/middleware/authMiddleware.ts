@@ -2,7 +2,8 @@ import type { NextFunction, Response } from 'express';
 import type { Request } from 'express-serve-static-core';
 import jwt from 'jsonwebtoken';
 
-export interface AuthRequest extends Request {
+export interface AuthRequest<P = Record<string, any>, ResBody = any, ReqBody = any, ReqQuery = any, Locals extends Record<string, any> = Record<string, any>>
+  extends Request<P, ResBody, ReqBody, ReqQuery, Locals> {
   user?: {
     userId: string;
     role: 'Admin' | 'Student' | 'SuperAdmin';
