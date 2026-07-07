@@ -1,36 +1,29 @@
 import express from 'express';
-import { fetchUsers, deleteUser, createCategory } from "../controllers/adminController.ts"
+import * as adminController from "../controllers/adminController.ts";
 import { verifyRole, verifyToken } from "../middleware/authMiddleware.ts";
 
 const router = express.Router();
 
+router.use(verifyToken);
+router.use(verifyRole(['admin']));
 
-// Will check if this is valid to use instead of adding verifyToken and verifyRole in every request below.
-router.use(verifyToken)
-router.use(verifyRole(['admin']))
+router.post('/categories', adminController.createCategory);
+router.get('/categories', adminController.getCategories);
 
-// GET request to retrieve all users. api/admin/users
-router.get("/users", fetchUsers)
+router.post('/quizzes', adminController.createQuiz);
+router.get('/quizzes', adminController.getQuizzes);
 
-// POST request for creating a category. api/admin/categories/create
-router.post("/categories/create", createCategory)
+router.post('/quizzes/:quizId/questions', adminController.addQuestion);
 
-// POST request for creating a quiz. api/admin/quizzes/create
-// router.post("/quizzes/create")
+router.post('/create-admin', adminController.createAdmin);
 
-// POST request for adding a question to a specific quiz. api/admin/quizzes/<quizId>/questions
-// router.post("/quizzes/:quizId/questions")
+router.get('/users', adminController.getUsers);
+router.delete('/users/:userId', adminController.deleteUser);
 
-// PUT request for updating a question of a quiz. api/admin/questions/<questionId>
-// router.put("/questions/:questionId")
-
-// DELETE request for deleting a category of said category id.
-// router.delete("/categories/:categoryId")
-
-// DELETE request for deleting a question of said question id. api/admin/questions/<questionId>
-// router.delete("/questions/:questionId")
-
-// DELETE request for deleting user of said id. api/admin/users/<id>
-router.delete("/users/:id", verifyToken, verifyRole(["admin"]), deleteUser);
+router.delete('/categories/:categoryId', adminController.deleteCategory);
+router.delete('/quizzes/:quizId', adminController.deleteQuiz);
+router.get('/quizzes/:quizId/questions', adminController.getQuestionsForQuiz);
+router.delete('/questions/:questionId', adminController.deleteQuestion);
+router.put('/questions/:questionId', adminController.editQuestion);
 
 export default router;
