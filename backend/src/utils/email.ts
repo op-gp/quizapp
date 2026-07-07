@@ -1,4 +1,5 @@
 import { mailConfig, mailTransporter, isMailConfigured } from '../configs/nodemailer.js';
+import sgMail from '@sendgrid/mail';
 
 export const sendOTPEmail = async (email: string, otp: string, type: 'VERIFICATION' | '2FA') => {
   const subject = type === 'VERIFICATION' 
@@ -32,7 +33,29 @@ export const sendOTPEmail = async (email: string, otp: string, type: 'VERIFICATI
     </div>
   `;
 
-  if (mailConfig.provider.toLowerCase() === 'nodemailer') {
+  if (mailConfig.provider === 'sendgrid') {
+    if (!isMailConfigured) {
+      console.error('[EMAIL CONFIG ERROR] EMAIL_PROVIDER is set to sendgrid but SENDGRID_API_KEY is missing or invalid.');
+      throw new Error('SendGrid configuration is incomplete. OTP email cannot be delivered.');
+    }
+
+    try {
+      await sgMail.send({
+        from: mailConfig.sendgridSender,
+        to: email,
+        subject,
+        text: textContent,
+        html: htmlContent,
+      });
+      console.log(`[EMAIL SENT] OTP ${type} successfully delivered to ${email} via SendGrid`);
+      return;
+    } catch (error) {
+      console.error(`[EMAIL ERROR] Failed to send SendGrid email to ${email}:`, error);
+      throw new Error('Failed to send OTP email via SendGrid.');
+    }
+  }
+
+  if (mailConfig.provider === 'nodemailer') {
     if (!isMailConfigured || !mailTransporter) {
       console.error('[EMAIL CONFIG ERROR] EMAIL_PROVIDER is set to nodemailer but SMTP configuration is incomplete or invalid. Please set SMTP_HOST, SMTP_PORT, SMTP_USER, and SMTP_PASS in Render environment variables.');
       throw new Error('SMTP configuration is incomplete. OTP email cannot be delivered.');
