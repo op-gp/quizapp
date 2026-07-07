@@ -7,7 +7,7 @@ export interface IOption {
 }
 
 export interface IQuestion extends Document {
-  quizId: Schema.Types.ObjectId;
+  quizId: Schema.Types.ObjectId | string;
   questionText: string;
   points: number;
   options: IOption[];
@@ -27,7 +27,7 @@ const optionSchema = new mongoose.Schema<IOption>({
 
 const questionSchema = new mongoose.Schema<IQuestion>({
   quizId: { 
-    type: Schema.ObjectId, 
+    type: Schema.Types.ObjectId, 
     ref: 'Quiz', 
     required: true 
 },

@@ -1,3 +1,5 @@
+﻿import type { IQuiz } from '../models/Quiz';
+import type { IQuestion } from '../models/Question';
 import Category from '../models/Category';
 import Quiz from '../models/Quiz';
 import Question from '../models/Question';
@@ -85,7 +87,8 @@ export const deleteUser = async (userId: string) => {
 };
 
 export const deleteCategory = async (categoryId: string) => {
-  const quizExists = await Quiz.exists({ categoryId });
+  const filter = { categoryId };
+  const quizExists = await Quiz.exists(filter);
   if (quizExists) {
     throw new CustomError('Cannot delete category because it has associated quizzes', 400);
   }
@@ -97,7 +100,8 @@ export const deleteCategory = async (categoryId: string) => {
 };
 
 export const deleteQuiz = async (quizId: string) => {
-  const questionExists = await Question.exists({ quizId });
+  const filter = { quizId };
+  const questionExists = await Question.exists(filter);
   if (questionExists) {
     throw new CustomError('Cannot delete quiz because it has associated questions', 400);
   }
@@ -139,12 +143,14 @@ export const editQuestion = async (
 
   question.questionText = questionText;
   question.points = points;
-  question.options.splice(0, question.options.length, ...options);
+  question.options = options;
   await question.save();
 
   return question;
 };
 
 export const getQuestionsForQuiz = async (quizId: string) => {
-  return await Question.find({ quizId });
+  const filter = { quizId };
+  return await Question.find(filter);
 };
+

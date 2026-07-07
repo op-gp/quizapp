@@ -1,29 +1,43 @@
 import express from 'express';
-import { createCategory, createQuiz, addQuestion, createAdmin, getCategories, getQuizzes, getUsers, deleteUser, deleteCategory, deleteQuiz, deleteQuestion, editQuestion, getQuestionsForQuiz } from '../controllers/adminController.ts';
-import { verifyRole, verifyToken } from "../middleware/authMiddleware.ts";
+import {
+  createCategory,
+  getCategories,
+  createQuiz,
+  getQuizzes,
+  addQuestion,
+  createAdmin,
+  getUsers,
+  deleteUser,
+  deleteCategory,
+  deleteQuiz,
+  getQuestionsForQuiz,
+  deleteQuestion,
+  editQuestion,
+} from '../controllers/adminController.ts';
+import { verifyRole, verifyToken } from '../middleware/authMiddleware.ts';
 
 const router = express.Router();
 
 router.use(verifyToken);
-router.use(verifyRole(['admin']));
+router.use(verifyRole(['Admin']));
 
 router.post('/categories', createCategory);
-router.get('/categories', adminController.getCategories);
+router.get('/categories', getCategories);
 
-router.post('/quizzes', adminController.createQuiz);
-router.get('/quizzes', adminController.getQuizzes);
+router.post('/quizzes', createQuiz);
+router.get('/quizzes', getQuizzes);
 
-router.post('/quizzes/:quizId/questions', adminController.addQuestion);
+router.post('/quizzes/:quizId/questions', addQuestion);
 
-router.post('/create-admin', adminController.createAdmin);
+router.post('/create-admin', createAdmin);
 
-router.get('/users', adminController.getUsers);
-router.delete('/users/:userId', adminController.deleteUser);
+router.get('/users', getUsers);
+router.delete('/users/:userId', deleteUser);
 
-router.delete('/categories/:categoryId', adminController.deleteCategory);
-router.delete('/quizzes/:quizId', adminController.deleteQuiz);
-router.get('/quizzes/:quizId/questions', adminController.getQuestionsForQuiz);
-router.delete('/questions/:questionId', adminController.deleteQuestion);
-router.put('/questions/:questionId', adminController.editQuestion);
+router.delete('/categories/:categoryId', deleteCategory);
+router.delete('/quizzes/:quizId', deleteQuiz);
+router.get('/quizzes/:quizId/questions', getQuestionsForQuiz);
+router.delete('/questions/:questionId', deleteQuestion);
+router.put('/questions/:questionId', editQuestion);
 
 export default router;

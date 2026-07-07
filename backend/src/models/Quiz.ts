@@ -1,8 +1,8 @@
 import mongoose, { Schema, model, Document} from 'mongoose';
 
 export interface IQuiz extends Document {
-  categoryId: Schema.Types.ObjectId;
-  creatorId: Schema.Types.ObjectId;
+  categoryId: Schema.Types.ObjectId | string;
+  creatorId: Schema.Types.ObjectId | string;
   title: string;
   description: string;
   timeLimit: number;
@@ -11,12 +11,12 @@ export interface IQuiz extends Document {
 
 const quizSchema = new mongoose.Schema<IQuiz>({
     categoryId: { 
-        type: Schema.ObjectId, 
+        type: Schema.Types.ObjectId, 
         ref: 'Category', 
         required: true 
     },
     creatorId: { 
-        type: Schema.ObjectId, 
+        type: Schema.Types.ObjectId, 
         ref: 'User', 
         required: true 
     },

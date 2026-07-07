@@ -19,11 +19,11 @@ export interface IAttempt extends Document {
 
 const attemptAnswerSchema = new mongoose.Schema<IAttemptAnswer>({
     questionId: {
-        type: Schema.ObjectId,
+        type: Schema.Types.ObjectId,
         required: true
     },
     selectedOptionId: {
-        type: Schema.ObjectId,
+        type: Schema.Types.ObjectId,
         default: null
     },
     isCorrect: {
@@ -34,12 +34,12 @@ const attemptAnswerSchema = new mongoose.Schema<IAttemptAnswer>({
 
 const attemptSchema = new mongoose.Schema<IAttempt>({
     userId: {
-        type: Schema.ObjectId,
+        type: Schema.Types.ObjectId,
         ref: 'User',
         required: true
     },
     quizId: {
-        type: Schema.ObjectId,
+        type: Schema.Types.ObjectId,
         ref: 'Quiz',
         required: true
     },

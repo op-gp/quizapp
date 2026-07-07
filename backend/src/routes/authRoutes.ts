@@ -1,20 +1,23 @@
 import express from 'express';
-
-import { register, login, refreshToken, logout } from "../controllers/authController.ts";
+import { register, login, getProfile, forgotPassword, resetPassword, verifyAccount, verifyLogin, completeRegistration } from '../controllers/authController';
+import { verifyToken } from '../middleware/authMiddleware';
 
 const router = express.Router();
 
-// Register POST request. api/auth/register
-router.post("/register", register)
+router.post('/register', register);
 
-// Login POST request. api/auth/login
-router.post("/login", login)
+router.post('/login', login);
 
-// Register GET request for Refresh Token
-router.get(`/refresh`, refreshToken);
+router.get('/profile', verifyToken, getProfile);
 
-// Register POST request for Logout
-router.post(`/logout`, logout)
+router.post('/forgot-password', forgotPassword);
+
+router.post('/reset-password', resetPassword);
+
+router.post('/verify-account', verifyAccount);
+
+router.post('/verify-login', verifyLogin);
+router.post('/complete-registration', completeRegistration);
 
 
 export default router;
