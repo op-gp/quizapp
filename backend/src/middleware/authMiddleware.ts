@@ -1,6 +1,13 @@
 // import type { Request, Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
 
+export interface AuthRequest extends Request {
+  user?: {
+    userId: string,
+    role: 'student' | 'admin' | 'superadmin';
+  }
+}
+
 export const verifyToken = (req: any, res: any, next: any) => {
     const authHeader = req.headers.authorization;
     if (!authHeader){

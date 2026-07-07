@@ -1,5 +1,7 @@
-import type { Request, Response } from 'express';
+import type { Request, Response, NextFunction } from 'express';
 import User from "../models/User.ts";
+import { AuthRequest } from '../middleware/authMiddleware.ts';
+import adminService from "../services/adminService.ts"
 
 // GET
 // Route logic for api/admin/users
@@ -13,10 +15,6 @@ export const fetchUsers = async (req: Request, res: Response) => {
         console.error("Error fetching all users");
         res.status(500).json({message: "Error retrieving users", error})
     }
-}
-
-export const createCategory = () => {
-
 }
 
 // DELETE
@@ -60,3 +58,13 @@ export const deleteUser = async (req: Request, res: Response) => {
         res.status(500).json({message: "Error in deleting user."})
     }
 }
+
+export const createCategory = async (req: AuthRequest, res: Response, next: NextFunction) => {
+  try {
+    const { name, description } = req.body;
+    const result = await adminService.createCategory(name, description);
+    sendSuccess(res, 'Category created successfully', result, 201);
+  } catch (error) {
+    next(error);
+  }
+};
