@@ -16,3 +16,5 @@ router.post('/quizzes/:quizId/submit', submitQuizAttempt);
 router.get('/attempts/history', getAttemptsHistory);
 
 router.get('/quizzes/:quizId/leaderboard', getLeaderboard);
+
+export default router;

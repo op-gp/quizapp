@@ -9,6 +9,7 @@ import path from 'path';
 // Import routes
 import authRoutes from './routes/authRoutes.ts';
 import adminRoutes from './routes/adminRoutes.ts';
+import studentRoutes from './routes/studentRoutes.ts';
 
 // Loads environment variables into the process.
 dotenv.config();
@@ -50,12 +51,19 @@ const PORT = process.env.PORT || 5001;
 
 // Middleware 
 
-app.use(cors());
+if (process.env.NODE_ENV !== "production"){
+    app.use(cors(
+    {
+        "origin": "http://localhost:5173",
+    }
+    ));
+}
 
 // Able to parse JSON that comes from the request.
 app.use(express.json());
-app.use("/api/auth", authRoutes)
-app.use("/api/admin", adminRoutes)
+app.use("/api/auth", authRoutes);
+app.use("/api/admin", adminRoutes);
+app.use("/api/student", studentRoutes);
 
 app.get('/api', (req: Request, res: Response) => {
   res.json({ message: 'Quiz Web App API is active and running.' });
