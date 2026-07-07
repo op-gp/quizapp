@@ -16,7 +16,7 @@ dotenv.config();
 
 // Validate critical environment variables before startup
 const validateEnv = (): void => {
-  const required = ['MONGODB_URI', 'JWT_SECRET'];
+  const required = ['MONGO_URI', 'JWT_SECRET'];
   const missing = required.filter(key => !process.env[key]);
 
   if (missing.length > 0) {
@@ -65,13 +65,13 @@ app.get('/api', (req: Request, res: Response) => {
 app.use(errorHandler);
 
 // 1. Serve the frontend static assets
-const frontendBuildPath = path.join(__dirname, '../../frontend/dist');
-app.use(express.static(frontendBuildPath));
+// const frontendBuildPath = path.join(__dirname, '../../frontend/dist');
+// app.use(express.static(frontendBuildPath));
 
 // 2. Fallback route: serve index.html for any non-API routes (enables React Router)
-app.get('*', (req: Request, res: Response) => {
-  res.sendFile(path.join(frontendBuildPath, 'index.html'));
-});
+// app.get('*', (req: Request, res: Response) => {
+//   res.sendFile(path.join(frontendBuildPath, 'index.html'));
+// });
 
 // First connect to the database and only after a successfull connection will the application start.
 // REASON: No reason for the application to start if it can't access the database to perform HTTP requests.

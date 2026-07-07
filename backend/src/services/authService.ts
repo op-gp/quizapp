@@ -1,8 +1,8 @@
 import bcrypt from 'bcrypt';
 import crypto from 'crypto';
 import jwt from 'jsonwebtoken';
-import User from '../models/User';
-import { CustomError } from '../utils/CustomError';
+import User from '../models/User.ts';
+import { CustomError } from '../utils/CustomError.ts';
 import { sendOTPEmail } from '../utils/email.ts';
 import { mailConfig, mailTransporter, isMailConfigured } from '../configs/nodemailer.ts';
 

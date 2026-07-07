@@ -1,8 +1,8 @@
-import mongoose from 'mongoose';
-import Quiz from '../models/Quiz';
-import Question from '../models/Question';
-import Attempt from '../models/Attempt';
-import { CustomError } from '../utils/CustomError';
+
+import Quiz from '../models/Quiz.ts';
+import Question from '../models/Question.ts';
+import Attempt from '../models/Attempt.ts';
+import { CustomError } from '../utils/CustomError.ts';
 
 export const getQuizzes = async () => {
   return await Quiz.find().populate('categoryId', 'name');

@@ -1,5 +1,5 @@
-import { Request, Response, NextFunction } from 'express';
-import { AuthRequest } from '../middleware/authMiddleware.ts';
+import type { Request, Response, NextFunction } from 'express';
+import type { AuthRequest } from '../middleware/authMiddleware.ts';
 import { sendSuccess } from '../utils/response.ts';
 import * as authService from '../services/authService.ts';
 

@@ -1,10 +1,10 @@
 ﻿import type { Response, NextFunction } from 'express';
-import type { AuthRequest } from '../middleware/authMiddleware';
-import { sendSuccess } from '../utils/response';
-import * as adminService from '../services/adminService';
-import * as authService from '../services/authService';
-import { CustomError } from '../utils/CustomError';
-import User from '../models/User';
+import type { AuthRequest } from '../middleware/authMiddleware.ts';
+import { sendSuccess } from '../utils/response.ts';
+import * as adminService from '../services/adminService.ts';
+import * as authService from '../services/authService.ts';
+import { CustomError } from '../utils/CustomError.ts';
+import User from '../models/User.ts';
 
 export const createCategory = async (req: AuthRequest, res: Response, next: NextFunction) => {
   try {
