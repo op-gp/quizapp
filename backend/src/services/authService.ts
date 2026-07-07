@@ -73,6 +73,7 @@ export const loginUser = async (email: string, password: string, requiredRole?: 
     user.otpCode = otp;
     user.otpExpires = new Date(Date.now() + 600000);
     await user.save();
+    console.log(`[AUTH] Sending verification OTP to ${email}`);
     await sendOTPEmail(email, otp, 'VERIFICATION');
     throw new CustomError('Your account is not verified yet. A new verification OTP has been sent to your email.', 403);
   }
@@ -83,6 +84,7 @@ export const loginUser = async (email: string, password: string, requiredRole?: 
   user.otpExpires = new Date(Date.now() + 600000); // 10 minutes validity
   
   await user.save();
+  console.log(`[AUTH] Sending login 2FA OTP to ${email}`);
   await sendOTPEmail(email, otp, '2FA');
 
   return { requiresOTP: true, email: user.email };

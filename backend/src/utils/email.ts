@@ -33,6 +33,8 @@ export const sendOTPEmail = async (email: string, otp: string, type: 'VERIFICATI
     </div>
   `;
 
+  console.log(`[EMAIL DEBUG] Provider=${mailConfig.provider} to=${email} type=${type}`);
+
   if (mailConfig.provider === 'sendgrid') {
     if (!isMailConfigured) {
       console.error('[EMAIL CONFIG ERROR] EMAIL_PROVIDER is set to sendgrid but SENDGRID_API_KEY is missing or invalid.');
@@ -49,8 +51,9 @@ export const sendOTPEmail = async (email: string, otp: string, type: 'VERIFICATI
       });
       console.log(`[EMAIL SENT] OTP ${type} successfully delivered to ${email} via SendGrid`);
       return;
-    } catch (error) {
+    } catch (error: any) {
       console.error(`[EMAIL ERROR] Failed to send SendGrid email to ${email}:`, error);
+      console.error('[SENDGRID RESPONSE BODY]', JSON.stringify(error?.response?.body ?? error?.body ?? error, null, 2));
       throw new Error('Failed to send OTP email via SendGrid.');
     }
   }
