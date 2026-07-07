@@ -1,16 +1,16 @@
 import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
-import { connectDB } from './configs/db.ts';
+import { connectDB } from './configs/db.js';
 import type {Request, Response} from 'express';
-import { errorHandler } from './middleware/errorMiddleware.ts';
+import { errorHandler } from './middleware/errorMiddleware.js';
 import path from 'path';
 import { fileURLToPath } from 'url';
 
 // Import routes
-import authRoutes from './routes/authRoutes.ts';
-import adminRoutes from './routes/adminRoutes.ts';
-import studentRoutes from './routes/studentRoutes.ts';
+import authRoutes from './routes/authRoutes.js';
+import adminRoutes from './routes/adminRoutes.js';
+import studentRoutes from './routes/studentRoutes.js';
 
 // Loads environment variables into the process.
 dotenv.config();

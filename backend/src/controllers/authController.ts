@@ -1,7 +1,7 @@
 import type { Request, Response, NextFunction } from 'express';
-import type { AuthRequest } from '../middleware/authMiddleware.ts';
-import { sendSuccess } from '../utils/response.ts';
-import * as authService from '../services/authService.ts';
+import type { AuthRequest } from '../middleware/authMiddleware.js';
+import { sendSuccess } from '../utils/response.js';
+import * as authService from '../services/authService.js';
 
 export const register = async (req: Request, res: Response, next: NextFunction) => {
   try {

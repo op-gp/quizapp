@@ -1,4 +1,4 @@
-import { mailConfig, mailTransporter, isMailConfigured } from '../configs/nodemailer.ts';
+import { mailConfig, mailTransporter, isMailConfigured } from '../configs/nodemailer.js';
 
 export const sendOTPEmail = async (email: string, otp: string, type: 'VERIFICATION' | '2FA') => {
   const subject = type === 'VERIFICATION' 

@@ -1,10 +1,10 @@
 import bcrypt from 'bcrypt';
 import crypto from 'crypto';
 import jwt from 'jsonwebtoken';
-import User from '../models/User.ts';
-import { CustomError } from '../utils/CustomError.ts';
-import { sendOTPEmail } from '../utils/email.ts';
-import { mailConfig, mailTransporter, isMailConfigured } from '../configs/nodemailer.ts';
+import User from '../models/User.js';
+import { CustomError } from '../utils/CustomError.js';
+import { sendOTPEmail } from '../utils/email.js';
+import { mailConfig, mailTransporter, isMailConfigured } from '../configs/nodemailer.js';
 
 const generateOTP = (): string => {
   return Math.floor(100000 + Math.random() * 900000).toString(); // Generates a 6-digit code

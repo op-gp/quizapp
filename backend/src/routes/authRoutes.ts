@@ -1,6 +1,6 @@
 import express from 'express';
-import { register, login, getProfile, forgotPassword, resetPassword, verifyAccount, verifyLogin, completeRegistration } from '../controllers/authController.ts';
-import { verifyToken } from '../middleware/authMiddleware.ts';
+import { register, login, getProfile, forgotPassword, resetPassword, verifyAccount, verifyLogin, completeRegistration } from '../controllers/authController.js';
+import { verifyToken } from '../middleware/authMiddleware.js';
 
 const router = express.Router();
 

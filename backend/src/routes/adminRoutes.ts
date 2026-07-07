@@ -13,8 +13,8 @@ import {
   getQuestionsForQuiz,
   deleteQuestion,
   editQuestion,
-} from '../controllers/adminController.ts';
-import { verifyRole, verifyToken } from '../middleware/authMiddleware.ts';
+} from '../controllers/adminController.js';
+import { verifyRole, verifyToken } from '../middleware/authMiddleware.js';
 
 const router = express.Router();
 

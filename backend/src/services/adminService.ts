@@ -1,8 +1,8 @@
-﻿import Category from '../models/Category.ts';
-import Quiz from '../models/Quiz.ts';
-import Question from '../models/Question.ts';
-import User from '../models/User.ts';
-import { CustomError } from '../utils/CustomError.ts';
+﻿import Category from '../models/Category.js';
+import Quiz from '../models/Quiz.js';
+import Question from '../models/Question.js';
+import User from '../models/User.js';
+import { CustomError } from '../utils/CustomError.js';
 
 export const createCategory = async (name: string, description: string) => {
   const existingCategory = await Category.findOne({ name });
