@@ -2,6 +2,7 @@ import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
 import { connectDB } from './configs/db.js';
+import { verifyEmailTransporter } from './configs/nodemailer.js';
 import type {Request, Response} from 'express';
 import { errorHandler } from './middleware/errorMiddleware.js';
 import path from 'path';
@@ -89,13 +90,25 @@ if (process.env.NODE_ENV === "production"){
   });
 }
 
-// First connect to the database and only after a successfull connection will the application start.
+// First connect to the database and only after a successful connection will the application start.
 // REASON: No reason for the application to start if it can't access the database to perform HTTP requests.
-connectDB().then( () => {
-        app.listen(PORT, 
-            () => {
-                console.log("Server started on port ", PORT)
-            }
-        )
+connectDB()
+  .then(async () => {
+    if (process.env.EMAIL_PROVIDER?.toLowerCase() === 'nodemailer') {
+      try {
+        await verifyEmailTransporter();
+        console.log('[CONFIG] SMTP transporter verified successfully.');
+      } catch (error) {
+        console.error('[CONFIG] SMTP transporter verification failed:', error);
+        process.exit(1);
+      }
     }
-);
+
+    app.listen(PORT, () => {
+      console.log('Server started on port', PORT);
+    });
+  })
+  .catch((error) => {
+    console.error('[FATAL] Failed to start application:', error);
+    process.exit(1);
+  });

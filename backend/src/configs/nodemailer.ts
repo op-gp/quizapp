@@ -34,3 +34,15 @@ export const mailTransporter = isMailConfigured
       socketTimeout: 10000,
     })
   : null;
+
+export const verifyEmailTransporter = async (): Promise<void> => {
+  if (mailConfig.provider.toLowerCase() !== 'nodemailer') {
+    return;
+  }
+
+  if (!isMailConfigured || !mailTransporter) {
+    throw new Error('Nodemailer is enabled but SMTP configuration is missing or invalid.');
+  }
+
+  await mailTransporter.verify();
+};
