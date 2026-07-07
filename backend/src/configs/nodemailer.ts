@@ -29,5 +29,8 @@ export const mailTransporter = isMailConfigured
       port: mailConfig.port,
       secure: mailConfig.secure,
       auth: mailConfig.auth,
+      connectionTimeout: 10000,
+      greetingTimeout: 10000,
+      socketTimeout: 10000,
     })
   : null;

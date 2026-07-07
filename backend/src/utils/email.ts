@@ -32,7 +32,12 @@ export const sendOTPEmail = async (email: string, otp: string, type: 'VERIFICATI
     </div>
   `;
 
-  if (isMailConfigured && mailTransporter) {
+  if (mailConfig.provider.toLowerCase() === 'nodemailer') {
+    if (!isMailConfigured || !mailTransporter) {
+      console.error('[EMAIL CONFIG ERROR] EMAIL_PROVIDER is set to nodemailer but SMTP configuration is incomplete or invalid. Please set SMTP_HOST, SMTP_PORT, SMTP_USER, and SMTP_PASS in Render environment variables.');
+      throw new Error('SMTP configuration is incomplete. OTP email cannot be delivered.');
+    }
+
     try {
       await mailTransporter.sendMail({
         from: mailConfig.from,
@@ -45,12 +50,13 @@ export const sendOTPEmail = async (email: string, otp: string, type: 'VERIFICATI
       return;
     } catch (error) {
       console.error(`[EMAIL ERROR] Failed to send email to ${email}:`, error);
+      throw new Error('Failed to send OTP email.');
     }
   }
 
   // Fallback: Console print
   console.log('\n' + '='.repeat(60));
-  console.log(`[DEVELOPMENT EMAIL MOCK] SMTP Server details not fully configured in .env.`);
+  console.log(`[DEVELOPMENT EMAIL MOCK] SMTP Server details not fully configured or email send failed.`);
   console.log(`[DEVELOPMENT EMAIL MOCK] Simulated Email Sent to: ${email}`);
   console.log(`[DEVELOPMENT EMAIL MOCK] Subject: ${subject}`);
   console.log(`[DEVELOPMENT EMAIL MOCK] OTP CODE: ${otp}`);
