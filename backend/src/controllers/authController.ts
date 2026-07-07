@@ -1,7 +1,8 @@
 import type { Request, Response } from "express";
 import bcrypt from "bcrypt";
 import User from "../models/User.ts";
-import jwt, { JwtPayload } from "jsonwebtoken";
+import jwt from "jsonwebtoken";
+import type { JwtPayload } from "jsonwebtoken";
 import dotenv from "dotenv";
 
 // Endpoint logic for api/auth/register
@@ -104,6 +105,7 @@ export const login = async (req: Request, res: Response) => {
       sameSite: "strict",
     });
 
+    console.log("User has successfully logged in.")
     res.status(200).json({
       accessToken,
       user: {
@@ -180,6 +182,7 @@ export const logout = (req: Request, res: Response) => {
       sameSite: "strict",
     });
 
+    console.log("User has successfully logged out.")
     res.status(200).json({ message: "Logged out successfully" });
   } catch (error) {
     console.error("authController: Error logging out the user", error);

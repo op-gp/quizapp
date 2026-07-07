@@ -4,11 +4,16 @@ import { verifyRole, verifyToken } from "../middleware/authMiddleware.ts";
 
 const router = express.Router();
 
+
+// Will check if this is valid to use instead of adding verifyToken and verifyRole in every request below.
+router.use(verifyToken)
+router.use(verifyRole(['admin']))
+
 // GET request to retrieve all users. api/admin/users
-router.get("/users", verifyToken, verifyRole(["admin"]), fetchUsers)
+router.get("/users", fetchUsers)
 
 // POST request for creating a category. api/admin/categories/create
-router.post("/categories/create", verifyToken, verifyRole(["admin"]), createCategory)
+router.post("/categories/create", createCategory)
 
 // POST request for creating a quiz. api/admin/quizzes/create
 // router.post("/quizzes/create")

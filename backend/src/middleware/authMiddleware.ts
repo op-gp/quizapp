@@ -1,6 +1,5 @@
 // import type { Request, Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
-import { throwDeprecation } from 'node:process';
 
 export const verifyToken = (req: any, res: any, next: any) => {
     const authHeader = req.headers.authorization;
@@ -35,7 +34,7 @@ export const verifyRole = (allowedRoles: ('student' | 'admin' | 'superadmin')[])
     if (userRole !== allowedRoles) {
       return res.status(403).json({ error: 'Access denied. Insufficient permissions.' });
     }
-    
+
     // SuperAdmin automatically pass role checks intended for admins
     const isSuperAdmin = req.user.role === 'superadmin';
     const isAllowed = allowedRoles.includes(req.user.role) || (isSuperAdmin && allowedRoles.includes('admin'));
