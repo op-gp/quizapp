@@ -1,14 +1,18 @@
 import express from 'express';
+import { getQuizzes, startQuizAttempt, submitQuizAttempt, getAttemptsHistory, getLeaderboard } from '../controllers/studentController.ts';}
+import { verifyRole, verifyToken } from '../middleware/authMiddleware.ts';
 
 const router = express.Router();
 
-// Fetches all available quizzes
-router.get("/quizzes");
+router.use(verifyToken);
+router.use(verifyRole(['Student']));
 
-// Student starts a quiz.
-router.get("/quizzes/:id/play")
+router.get('/quizzes', getQuizzes);
 
-// Student submits the quiz.
-router.post("quizzes/:id/submit")
+router.get('/quizzes/:quizId/play', startQuizAttempt);
 
-// router.get("/attempts/history")
+router.post('/quizzes/:quizId/submit', submitQuizAttempt);
+
+router.get('/attempts/history', getAttemptsHistory);
+
+router.get('/quizzes/:quizId/leaderboard', getLeaderboard);
