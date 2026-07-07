@@ -1,6 +1,23 @@
 import mongoose, { Schema, model } from 'mongoose';
 
-const attemptAnswerSchema = new mongoose.Schema({
+export interface IAttemptAnswer {
+  questionId: Schema.Types.ObjectId;
+  selectedOptionId: Schema.Types.ObjectId | null;
+  isCorrect: boolean;
+}
+
+export interface IAttempt extends Document {
+  userId: Schema.Types.ObjectId;
+  quizId: Schema.Types.ObjectId;
+  score: number;
+  totalPoints: number;
+  timeTakenSeconds: number;
+  startedAt: Date;
+  submittedAt: Date;
+  answers: IAttemptAnswer[];
+}
+
+const attemptAnswerSchema = new mongoose.Schema<IAttemptAnswer>({
     questionId: {
         type: Schema.ObjectId,
         required: true
@@ -15,7 +32,7 @@ const attemptAnswerSchema = new mongoose.Schema({
     }
 })
 
-const attemptSchema = new mongoose.Schema({
+const attemptSchema = new mongoose.Schema<IAttempt>({
     userId: {
         type: Schema.ObjectId,
         ref: 'User',
@@ -47,6 +64,6 @@ const attemptSchema = new mongoose.Schema({
     {timestamps: true}
 )
 
-const Attempt = mongoose.model("Attempt", attemptSchema);
+const Attempt = mongoose.model<IAttempt>("Attempt", attemptSchema);
 
 export default Attempt

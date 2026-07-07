@@ -1,6 +1,19 @@
 import mongoose, { Schema, model } from 'mongoose';
 
-const optionSchema = new mongoose.Schema({
+export interface IOption {
+  _id?: Schema.Types.ObjectId;
+  optionText: string;
+  isCorrect: boolean;
+}
+
+export interface IQuestion extends Document {
+  quizId: Schema.Types.ObjectId;
+  questionText: string;
+  points: number;
+  options: IOption[];
+}
+
+const optionSchema = new mongoose.Schema<IOption>({
   optionText: { 
     type: String, 
     required: true 
@@ -12,7 +25,7 @@ const optionSchema = new mongoose.Schema({
 }
 });
 
-const questionSchema = new mongoose.Schema({
+const questionSchema = new mongoose.Schema<IQuestion>({
   quizId: { 
     type: Schema.ObjectId, 
     ref: 'Quiz', 
@@ -28,6 +41,6 @@ const questionSchema = new mongoose.Schema({
   options: [optionSchema]
 });
 
-const Question = mongoose.model("Question", questionSchema);
+const Question = mongoose.model<IQuestion>("Question", questionSchema);
 
 export default Question;

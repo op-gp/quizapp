@@ -1,7 +1,12 @@
 import mongoose, { Schema, model } from 'mongoose';
 
+export interface ICategory extends Document {
+  name: string;
+  description: string;
+}
+
 // Creating category schema with mongoose.
-const categorySchema = new mongoose.Schema({
+const categorySchema = new mongoose.Schema<ICategory>({
     name: {
         type: String,
         required: true,
@@ -14,6 +19,6 @@ const categorySchema = new mongoose.Schema({
 })
 
 // Creating category model from schema.
-const Category = mongoose.model("Category", categorySchema);
+const Category = mongoose.model<ICategory>("Category", categorySchema);
 
 export default Category;
