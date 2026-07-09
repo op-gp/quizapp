@@ -2,7 +2,7 @@ import { mailConfig, mailTransporter, isMailConfigured } from '../configs/nodema
 
 export const sendOTPEmail = async (email: string, otp: string, type: 'VERIFICATION' | '2FA') => {
   const subject = type === 'VERIFICATION' 
-    ? 'Verify Your Quiz Web App Account' 
+    ? 'Verify Your QuizIt Account' 
     : 'Your Login Verification Code (2FA)';
 
   const textContent = type === 'VERIFICATION'
@@ -11,7 +11,7 @@ export const sendOTPEmail = async (email: string, otp: string, type: 'VERIFICATI
 
   const htmlContent = `
     <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #e2e8f0; border-radius: 8px;">
-      <h2 style="color: #2563eb; text-align: center;">Quiz Web App</h2>
+      <h2 style="color: #2563eb; text-align: center;">QuizIt</h2>
       <hr style="border: 0; border-top: 1px solid #e2e8f0; margin: 20px 0;" />
       <p style="font-size: 16px; color: #334155;">Hello,</p>
       <p style="font-size: 16px; color: #334155;">
@@ -27,7 +27,7 @@ export const sendOTPEmail = async (email: string, otp: string, type: 'VERIFICATI
       </p>
       <hr style="border: 0; border-top: 1px solid #e2e8f0; margin: 20px 0;" />
       <p style="font-size: 12px; color: #94a3b8; text-align: center;">
-        Quiz Web App © ${new Date().getFullYear()}
+        QuizIt © ${new Date().getFullYear()}
       </p>
     </div>
   `;
